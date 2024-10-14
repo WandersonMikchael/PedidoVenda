@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2024/06/24 15:46:08.000.451,=C:\Users\wanderson.gomes\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/10/03 17:12:01.000.636,=C:\Users\wanderson.gomes\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/10/10 18:17:06.000.282,=C:\Users\wanderson.gomes\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/10/10 18:18:26.000.389,C:\Facilitadores\WkPedidoVenda\View\UnPrincipal.pas=C:\Users\wanderson.gomes\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/10/10 18:18:26.000.389,C:\Facilitadores\WkPedidoVenda\View\UnPrincipal.dfm=C:\Users\wanderson.gomes\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2024/10/10 18:18:38.000.174,C:\Facilitadores\WkPedidoVenda\WkPedidoVenda.dproj=C:\Users\wanderson.gomes\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2024/10/12 11:14:17.000.183,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/12 11:16:51.000.218,=C:\Facilitadores\WkPedidoVenda\View\uConsulta.pas</Transaction>
+    <Transaction>2024/10/12 11:34:36.000.687,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/12 11:36:57.000.653,C:\Facilitadores\WkPedidoVenda\Unit1.pas=C:\Facilitadores\WkPedidoVenda\Database\uDmWkPedidoVenda.pas</Transaction>
+    <Transaction>2024/10/12 11:36:57.000.653,C:\Facilitadores\WkPedidoVenda\Unit1.dfm=C:\Facilitadores\WkPedidoVenda\Database\uDmWkPedidoVenda.dfm</Transaction>
+    <Transaction>2024/10/12 11:37:06.000.685,=C:\Facilitadores\WkPedidoVenda\Utils\UiniUtils.pas</Transaction>
+    <Transaction>2024/10/12 11:41:57.000.985,=C:\Facilitadores\WkPedidoVenda\Utils\UresourceUtils.pas</Transaction>
+    <Transaction>2024/10/12 12:17:14.000.192,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/12 12:18:26.000.460,C:\Facilitadores\WkPedidoVenda\Unit1.pas=C:\Facilitadores\WkPedidoVenda\src\uDatabaseManager.pas</Transaction>
+    <Transaction>2024/10/12 12:39:40.000.131,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/12 12:39:58.000.668,C:\Facilitadores\WkPedidoVenda\Unit1.pas=C:\Facilitadores\WkPedidoVenda\src\uPedidoManager.pas</Transaction>
+    <Transaction>2024/10/14 08:36:02.000.953,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:36:20.000.629,C:\Facilitadores\WkPedidoVenda\Model\PedidoModel.pas=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:37:28.000.456,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:37:38.000.675,C:\Facilitadores\WkPedidoVenda\Model\ItemPedidoModel.pas=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:39:50.000.139,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:40:01.000.694,C:\Facilitadores\WkPedidoVenda\Controller\PedidoController.pas=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:40:10.000.975,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:40:25.000.543,C:\Facilitadores\WkPedidoVenda\Controller\ItemPedidoController.pas=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:46:06.000.595,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:46:17.000.504,C:\Facilitadores\WkPedidoVenda\Unit1.pas=C:\Facilitadores\WkPedidoVenda\repositories\PedidoRepository.pas</Transaction>
+    <Transaction>2024/10/14 08:46:26.000.567,=C:\Facilitadores\WkPedidoVenda\Unit1.pas</Transaction>
+    <Transaction>2024/10/14 08:46:37.000.673,C:\Facilitadores\WkPedidoVenda\Unit1.pas=C:\Facilitadores\WkPedidoVenda\repositories\ItemPedidoRepository.pas</Transaction>
+    <Transaction>2024/10/14 10:09:53.356,C:\Facilitadores\WkPedidoVenda\src\uPedidoManager.pas=</Transaction>
+    <Transaction>2024/10/14 10:10:06.466,C:\Facilitadores\WkPedidoVenda\src\uDatabaseManager.pas=</Transaction>
+    <Transaction>2024/10/14 10:10:36.204,=C:\Facilitadores\WkPedidoVenda\utils\uDatabaseManager.pas</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="controllers"/>
+    <File Path="controllers\ItemPedidoController.pas"/>
+    <File Path="controllers\PedidoController.pas"/>
+    <File Path="Database"/>
+    <File Path="Database\uDmWkPedidoVenda.pas"/>
+    <File Path="Database\uDmWkPedidoVenda.dfm"/>
+    <File Path="models"/>
+    <File Path="models\ItemPedidoModel.pas"/>
+    <File Path="models\PedidoModel.pas"/>
+    <File Path="repositories"/>
+    <File Path="repositories\PedidoRepository.pas"/>
+    <File Path="repositories\ItemPedidoRepository.pas"/>
+    <File Path="utils"/>
+    <File Path="utils\UiniUtils.pas"/>
+    <File Path="utils\UresourceUtils.pas"/>
+    <File Path="utils\uDatabaseManager.pas"/>
+    <File Path="views"/>
+    <File Path="views\uConsulta.pas"/>
+    <File Path="views\uConsulta.dfm"/>
+    <File Path="views\UnPrincipal.pas"/>
+    <File Path="views\UnPrincipal.dfm"/>
+  </ProjectSortOrder>
+</BorlandProject>
