@@ -17,6 +17,7 @@ Este é um MVP de gerenciamento de pedidos desenvolvido em Delphi, utilizando os
 - /controllers -> Classes que implementam a lógica de negócio (PedidoController, ItemPedidoController) 
 - /views -> Formulários e interfaces do usuário (UnPrincipal, uConsulta) 
 - /utils -> Classes utilitárias (uDatabaseManager, UresourceUtils, UIniUtils)
+- /files -> Biblioteca de comunicação com o banco de dados e modelo do arquivo .ini
 - /Database -> DataModule (uDmWkPedidoVenda)
 - /Dump -> Dump do banco de dados
 
