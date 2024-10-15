@@ -14,7 +14,6 @@ type
     constructor Create(AConnection: TFDConnection);
 
     function InserirPedido(ACodigoCliente: Integer; AValorTotal: Double): Integer;
-    procedure AtualizarPedido(NumeroPedido: Integer; ACodigoCliente: Integer; AValorTotal: Double);
     procedure DeletarPedido(NumeroPedido: Integer);
     function ObterPedido(NumeroPedido: Integer): TFDQuery;
   end;
@@ -30,31 +29,27 @@ end;
 
 function TPedidoRepository.InserirPedido(ACodigoCliente: Integer; AValorTotal: Double): Integer;
 begin
+  FDatabaseConnection.StartTransaction;
   with TFDQuery.Create(nil) do
   try
-    Connection := FDatabaseConnection;
-    SQL.Text := 'INSERT INTO Pedidos (DataEmissao, CodigoCliente, ValorTotal) VALUES (:DataEmissao, :CodigoCliente, :ValorTotal)';
-    ParamByName('DataEmissao').AsDate := Date;
-    ParamByName('CodigoCliente').AsInteger := ACodigoCliente;
-    ParamByName('ValorTotal').AsFloat := AValorTotal;
-    ExecSQL;
+    try
+      Connection := FDatabaseConnection;
+      SQL.Text := 'INSERT INTO Pedidos (DataEmissao, CodigoCliente, ValorTotal) VALUES (:DataEmissao, :CodigoCliente, :ValorTotal)';
+      ParamByName('DataEmissao').AsDate := Date;
+      ParamByName('CodigoCliente').AsInteger := ACodigoCliente;
+      ParamByName('ValorTotal').AsFloat := AValorTotal;
+      ExecSQL;
 
-    Result := GetLastAutoIncValue;
-  finally
-    Free;
-  end;
-end;
+      Result := GetLastAutoIncValue;
 
-procedure TPedidoRepository.AtualizarPedido(NumeroPedido: Integer; ACodigoCliente: Integer; AValorTotal: Double);
-begin
-  with TFDQuery.Create(nil) do
-  try
-    Connection := FDatabaseConnection;
-    SQL.Text := 'UPDATE Pedidos SET CodigoCliente = :CodigoCliente, ValorTotal = :ValorTotal WHERE NumeroPedido = :NumeroPedido';
-    ParamByName('CodigoCliente').AsInteger := ACodigoCliente;
-    ParamByName('ValorTotal').AsFloat := AValorTotal;
-    ParamByName('NumeroPedido').AsInteger := NumeroPedido;
-    ExecSQL;
+      FDatabaseConnection.Commit;
+    except
+      on E: Exception do
+      begin
+        FDatabaseConnection.Rollback;
+        raise Exception.Create('Ocorreu um erro ao processar a transação: '+E.Message);
+      end;
+    end;
   finally
     Free;
   end;
@@ -62,12 +57,23 @@ end;
 
 procedure TPedidoRepository.DeletarPedido(NumeroPedido: Integer);
 begin
+  FDatabaseConnection.StartTransaction;
   with TFDQuery.Create(nil) do
   try
-    Connection := FDatabaseConnection;
-    SQL.Text := 'DELETE FROM Pedidos WHERE NumeroPedido = :NumeroPedido';
-    ParamByName('NumeroPedido').AsInteger := NumeroPedido;
-    ExecSQL;
+    try
+      Connection := FDatabaseConnection;
+      SQL.Text := 'DELETE FROM Pedidos WHERE NumeroPedido = :NumeroPedido';
+      ParamByName('NumeroPedido').AsInteger := NumeroPedido;
+      ExecSQL;
+
+      FDatabaseConnection.Commit;
+    except
+      on E: Exception do
+      begin
+        FDatabaseConnection.Rollback;
+        raise Exception.Create('Ocorreu um erro ao processar a transação: '+E.Message);
+      end;
+    end;
   finally
     Free;
   end;

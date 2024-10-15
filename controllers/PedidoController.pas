@@ -18,7 +18,6 @@ type
     constructor Create(APedidoRepo: TPedidoRepository; AItemPedidoRepo: TItemPedidoRepository);
 
     function CriarPedido(APedido: TPedido): Integer;
-    procedure AtualizarPedido(APedido: TPedido);
     procedure DeletarPedido(NumeroPedido: Integer);
     function CarregarPedido(NumeroPedido: Integer): TPedido;
   end;
@@ -59,20 +58,6 @@ begin
   Result := NumeroPedido;
 end;
 
-procedure TPedidoController.AtualizarPedido(APedido: TPedido);
-var
-  Item: TItemPedido;
-begin
-  APedido.AtualizarValorTotal;
-
-  FPedidoRepo.AtualizarPedido(APedido.NumeroPedido, APedido.CodigoCliente, APedido.ValorTotal);
-
-  for Item in APedido.Itens do
-  begin
-    FItemPedidoRepo.AtualizarItem(APedido.NumeroPedido, Item.CodigoProduto, Item.Quantidade, Item.ValorUnitario, Item.ValorTotal);
-  end;
-end;
-
 procedure TPedidoController.DeletarPedido(NumeroPedido: Integer);
 begin
   FItemPedidoRepo.DeletarItensPorPedido(NumeroPedido);
@@ -84,6 +69,7 @@ var
   Pedido: TPedido;
   Item: TItemPedido;
   QryPedido, QryItens: TFDQuery;
+  i:Integer;
 begin
   QryPedido := FPedidoRepo.ObterPedido(NumeroPedido);
   try
@@ -97,9 +83,11 @@ begin
 
       QryItens := FItemPedidoRepo.ObterItensPorPedido(NumeroPedido);
       try
+        i := 0;
         while not QryItens.Eof do
         begin
-          Item := TItemPedido.Create(QryItens.FieldByName('CodigoProduto').AsInteger, QryItens.FieldByName('Descricao').AsString,
+          Inc(i);
+          Item := TItemPedido.Create(i, QryItens.FieldByName('CodigoProduto').AsInteger, QryItens.FieldByName('Descricao').AsString,
             QryItens.FieldByName('Quantidade').AsInteger, QryItens.FieldByName('ValorUnitario').AsFloat);
           Pedido.AdicionarItem(Item);
           QryItens.Next;

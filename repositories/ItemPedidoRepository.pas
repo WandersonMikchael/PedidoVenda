@@ -3,7 +3,7 @@ unit ItemPedidoRepository;
 interface
 
 uses
-  FireDAC.Comp.Client, uDatabaseManager;
+  FireDAC.Comp.Client, System.SysUtils, uDatabaseManager;
 
 type
   TItemPedidoRepository = class
@@ -13,7 +13,6 @@ type
     constructor Create(AConnection: TFDConnection);
 
     procedure InserirItem(NumeroPedido: Integer; CodigoProduto: Integer; Quantidade: Double; ValorUnitario: Double; ValorTotal: Double);
-    procedure AtualizarItem(NumeroPedido: Integer; CodigoProduto: Integer; Quantidade: Double; ValorUnitario: Double; ValorTotal: Double);
     procedure DeletarItensPorPedido(NumeroPedido: Integer);
     function ObterItensPorPedido(NumeroPedido: Integer): TFDQuery;
   end;
@@ -29,34 +28,27 @@ end;
 
 procedure TItemPedidoRepository.InserirItem(NumeroPedido: Integer; CodigoProduto: Integer; Quantidade: Double; ValorUnitario: Double; ValorTotal: Double);
 begin
+  FDatabaseConnection.StartTransaction;
   with TFDQuery.Create(nil) do
   try
-    Connection := FDatabaseConnection;
-    SQL.Text := 'INSERT INTO ItensPedido (NumeroPedido, CodigoProduto, Quantidade, ValorUnitario, ValorTotal) VALUES (:NumeroPedido, :CodigoProduto, :Quantidade, :ValorUnitario, :ValorTotal)';
-    ParamByName('NumeroPedido').AsInteger := NumeroPedido;
-    ParamByName('CodigoProduto').AsInteger := CodigoProduto;
-    ParamByName('Quantidade').AsFloat := Quantidade;
-    ParamByName('ValorUnitario').AsFloat := ValorUnitario;
-    ParamByName('ValorTotal').AsFloat := ValorTotal;
-    ExecSQL;
-  finally
-    Free;
-  end;
-end;
+    try
+      Connection := FDatabaseConnection;
+      SQL.Text := 'INSERT INTO ItensPedido (NumeroPedido, CodigoProduto, Quantidade, ValorUnitario, ValorTotal) VALUES (:NumeroPedido, :CodigoProduto, :Quantidade, :ValorUnitario, :ValorTotal)';
+      ParamByName('NumeroPedido').AsInteger := NumeroPedido;
+      ParamByName('CodigoProduto').AsInteger := CodigoProduto;
+      ParamByName('Quantidade').AsFloat := Quantidade;
+      ParamByName('ValorUnitario').AsFloat := ValorUnitario;
+      ParamByName('ValorTotal').AsFloat := ValorTotal;
+      ExecSQL;
 
-procedure TItemPedidoRepository.AtualizarItem(NumeroPedido: Integer; CodigoProduto: Integer; Quantidade: Double; ValorUnitario: Double; ValorTotal: Double);
-begin
-  with TFDQuery.Create(nil) do
-  try
-    Connection := FDatabaseConnection;
-    SQL.Text := 'UPDATE ItensPedido SET Quantidade = :Quantidade, ValorUnitario = :ValorUnitario, ValorTotal = :ValorTotal ' +
-                'WHERE NumeroPedido = :NumeroPedido AND CodigoProduto = :CodigoProduto';
-    ParamByName('NumeroPedido').AsInteger := NumeroPedido;
-    ParamByName('CodigoProduto').AsInteger := CodigoProduto;
-    ParamByName('Quantidade').AsFloat := Quantidade;
-    ParamByName('ValorUnitario').AsFloat := ValorUnitario;
-    ParamByName('ValorTotal').AsFloat := ValorTotal;
-    ExecSQL;
+      FDatabaseConnection.Commit;
+    except
+      on E: Exception do
+      begin
+        FDatabaseConnection.Rollback;
+        raise Exception.Create('Ocorreu um erro ao processar a transação: '+E.Message);
+      end;
+    end;
   finally
     Free;
   end;
@@ -64,12 +56,23 @@ end;
 
 procedure TItemPedidoRepository.DeletarItensPorPedido(NumeroPedido: Integer);
 begin
+  FDatabaseConnection.StartTransaction;
   with TFDQuery.Create(nil) do
   try
-    Connection := FDatabaseConnection;
-    SQL.Text := 'DELETE FROM ItensPedido WHERE NumeroPedido = :NumeroPedido';
-    ParamByName('NumeroPedido').AsInteger := NumeroPedido;
-    ExecSQL;
+    try
+      Connection := FDatabaseConnection;
+      SQL.Text := 'DELETE FROM ItensPedido WHERE NumeroPedido = :NumeroPedido';
+      ParamByName('NumeroPedido').AsInteger := NumeroPedido;
+      ExecSQL;
+
+      FDatabaseConnection.Commit;
+    except
+      on E: Exception do
+      begin
+        FDatabaseConnection.Rollback;
+        raise Exception.Create('Ocorreu um erro ao processar a transação: '+E.Message);
+      end;
+    end;
   finally
     Free;
   end;

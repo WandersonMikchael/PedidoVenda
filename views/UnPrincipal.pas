@@ -20,7 +20,7 @@ type
     pnlRodape: TPanel;
     dbgrdProdutos: TDBGrid;
     pnlTotalizacao: TPanel;
-    btnGravar: TSpeedButton;
+    btnGravar: TButton;
     statOpcoes: TStatusBar;
     edtCliente: TEdit;
     edtProduto: TEdit;
@@ -32,7 +32,6 @@ type
     lblVlrUnit: TLabel;
     btnCliente: TImage;
     btnProduto: TImage;
-    btnAdicionar: TSpeedButton;
     pnlBtnSalvar: TPanel;
     cdsItensPedido: TClientDataSet;
     dsItensPedido: TDataSource;
@@ -46,13 +45,14 @@ type
     fltfldItensPedidoQuantidade: TFloatField;
     fltfldItensPedidoValorUnitario: TFloatField;
     fltfldItensPedidoValorTotal: TFloatField;
-    pnlAdicionar: TPanel;
     pnlConsultarPedido: TPanel;
     btnConsultarPedido: TSpeedButton;
     pnlExcluirPedido: TPanel;
     btnCancelarPedido: TSpeedButton;
     pnlCancelar: TPanel;
-    btnCancelar: TSpeedButton;
+    btnCancelar: TButton;
+    btnAdicionar: TButton;
+    cdsItensPedidoIdItem: TIntegerField;
     procedure btnClienteClick(Sender: TObject);
     procedure btnProdutoClick(Sender: TObject);
     procedure btnAdicionarClick(Sender: TObject);
@@ -79,6 +79,8 @@ type
     procedure BloquearCamposCliente(Acao: Boolean);
     procedure LimparCamposProduto;
     procedure LimparTela;
+    procedure CarregarObjetoPedidoItens;
+    function RetornarIdItem: Integer;
   public
     { Public declarations }
   end;
@@ -93,24 +95,39 @@ uses
 
 {$R *.dfm}
 
+function TfrmPedidoVenda.RetornarIdItem:Integer;
+begin
+  if cdsItensPedido.RecordCount = 0 then
+    Result := 1
+  else
+  begin
+    cdsItensPedido.Last;
+    Result := cdsItensPedido.FieldByName('IdItem').AsInteger + 1;
+  end;
+end;
+
 procedure TfrmPedidoVenda.btnAdicionarClick(Sender: TObject);
 begin
   if (edtProduto.Text <> '') and (edtQtde.Text <> '') and (edtVlrUnit.Text <> '') then
   begin
-    var NovoItem := TItemPedido.Create(StrToInt(edtProduto.Text), edtNomeProduto.Text, StrToFloat(edtQtde.Text), StrToFloat(edtVlrUnit.Text));
 
-    Pedido.AdicionarItem(NovoItem);
+    if cdsItensPedido.State <> dsEdit then
+    begin
+      var NewID := RetornarIdItem;
+      cdsItensPedido.Append;
+      cdsItensPedido.FieldByName('IdItem').AsInteger := NewID;
+    end;
 
-    cdsItensPedido.Append;
-    cdsItensPedido.FieldByName('CodigoProduto').AsInteger := NovoItem.CodigoProduto;
-    cdsItensPedido.FieldByName('DescricaoProduto').AsString := NovoItem.DescricaoProduto;
-    cdsItensPedido.FieldByName('Quantidade').AsFloat := NovoItem.Quantidade;
-    cdsItensPedido.FieldByName('ValorUnitario').AsFloat := NovoItem.ValorUnitario;
-    cdsItensPedido.FieldByName('ValorTotal').AsFloat := NovoItem.ValorTotal;
+    cdsItensPedido.FieldByName('CodigoProduto').AsInteger := StrToInt(edtProduto.Text);
+    cdsItensPedido.FieldByName('DescricaoProduto').AsString := edtNomeProduto.Text;
+    cdsItensPedido.FieldByName('Quantidade').AsFloat := StrToFloat(edtQtde.Text);
+    cdsItensPedido.FieldByName('ValorUnitario').AsFloat := StrToFloat(edtVlrUnit.Text);
+    cdsItensPedido.FieldByName('ValorTotal').AsFloat := (StrToFloat(edtQtde.Text) * StrToFloat(edtVlrUnit.Text));
     cdsItensPedido.Post;
 
     AtualizaTotal;
     LimparCamposProduto;
+    edtProduto.SetFocus;
   end;
 end;
 
@@ -149,6 +166,7 @@ begin
     for var Item in Pedido.Itens do
     begin
       cdsItensPedido.Append;
+      cdsItensPedido.FieldByName('IdItem').AsInteger := Item.IdItem;
       cdsItensPedido.FieldByName('CodigoProduto').AsInteger := Item.CodigoProduto;
       cdsItensPedido.FieldByName('DescricaoProduto').AsString := Item.DescricaoProduto;
       cdsItensPedido.FieldByName('Quantidade').AsFloat := Item.Quantidade;
@@ -164,9 +182,28 @@ begin
   end;
 end;
 
+procedure TfrmPedidoVenda.CarregarObjetoPedidoItens;
+begin
+  cdsItensPedido.First;
+
+  while not cdsItensPedido.Eof do
+  begin
+    var NovoItem := TItemPedido.Create(cdsItensPedido.FieldByName('IdItem').AsInteger,
+                                      cdsItensPedido.FieldByName('CodigoProduto').AsInteger,
+                                      cdsItensPedido.FieldByName('DescricaoProduto').AsString,
+                                      cdsItensPedido.FieldByName('Quantidade').AsFloat,
+                                      cdsItensPedido.FieldByName('ValorUnitario').AsFloat);
+
+    Pedido.AdicionarItem(NovoItem);
+    cdsItensPedido.Next;
+  end;
+
+end;
+
 procedure TfrmPedidoVenda.btnGravarClick(Sender: TObject);
 begin
   try
+    CarregarObjetoPedidoItens;
     var NroPedido := PedidoManager.CriarPedido(Pedido);
     LimparTela;
     BloquearCamposCliente(False);
@@ -232,11 +269,14 @@ begin
   end
   else if Key = VK_RETURN then
   begin
+    cdsItensPedido.Edit;
     edtProduto.Text := cdsItensPedido.FieldByName('CodigoProduto').AsString;
     edtNomeProduto.Text := cdsItensPedido.FieldByName('DescricaoProduto').AsString;
     edtQtde.Text := FloatToStr(cdsItensPedido.FieldByName('Quantidade').AsFloat);
     edtVlrUnit.Text := FloatToStr(cdsItensPedido.FieldByName('ValorUnitario').AsFloat);
-    cdsItensPedido.Delete;
+
+    //Foco no campo Quantidade
+    edtQtde.SetFocus;
   end;
 end;
 
@@ -247,12 +287,17 @@ begin
     edtCliente.Enabled := False;
     edtNomeCliente.Enabled := False;
     btnCliente.Enabled := False;
+    pnlConsultarPedido.Visible := False;
+    pnlExcluirPedido.Visible := False;
   end
   else
   begin
     edtCliente.Enabled := True;
     edtNomeCliente.Enabled := True;
     btnCliente.Enabled := True;
+    pnlConsultarPedido.Visible := True;
+    pnlExcluirPedido.Visible := True;
+    edtCliente.SetFocus;
   end;
 end;
 
@@ -330,6 +375,7 @@ begin
       ShowMessage('Produto não encontrado.');
       edtProduto.Clear;
       edtVlrUnit.Clear;
+      edtProduto.SetFocus;
     end
     else
     begin
@@ -342,8 +388,6 @@ end;
 procedure TfrmPedidoVenda.FormCreate(Sender: TObject);
 begin
   try
-
-    //ConexaoBanco := TConexaoBanco.Create(nil);
     ConexaoBanco.DataModuleCreate(Self);
     DatabaseManager := TDatabaseManager.Create(ConexaoBanco.cnxBancoDeDados); // Conexão do DataModule
     PedidoManager := TPedidoController.Create(TPedidoRepository.Create(ConexaoBanco.cnxBancoDeDados),

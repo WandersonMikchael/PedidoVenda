@@ -5,6 +5,7 @@ interface
 type
   TItemPedido = class
   private
+    FIdItem: Integer;
     FCodigoProduto: Integer;
     FDescricaoProduto: string;
     FQuantidade: Double;
@@ -14,8 +15,9 @@ type
     procedure CalcularValorTotal;
 
   public
-    constructor Create(ACodigoProduto: Integer; ADescricaoProduto: string; AQuantidade: Double; AValorUnitario: Double);
+    constructor Create(AIdItem, ACodigoProduto: Integer; ADescricaoProduto: string; AQuantidade: Double; AValorUnitario: Double);
 
+    property IdItem: Integer read FIdItem write FIdItem;
     property CodigoProduto: Integer read FCodigoProduto write FCodigoProduto;
     property DescricaoProduto: string read FDescricaoProduto write FDescricaoProduto;
     property Quantidade: Double read FQuantidade write FQuantidade;
@@ -29,8 +31,9 @@ implementation
 
 { TItemPedido }
 
-constructor TItemPedido.Create(ACodigoProduto: Integer; ADescricaoProduto: string; AQuantidade: Double; AValorUnitario: Double);
+constructor TItemPedido.Create(AIdItem, ACodigoProduto: Integer; ADescricaoProduto: string; AQuantidade: Double; AValorUnitario: Double);
 begin
+  FIdItem := AIdItem;
   FCodigoProduto := ACodigoProduto;
   FDescricaoProduto := ADescricaoProduto;
   FQuantidade := AQuantidade;

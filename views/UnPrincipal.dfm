@@ -145,6 +145,21 @@ object frmPedidoVenda: TfrmPedidoVenda
         Height = 14
         Caption = 'Descri'#231#227'o do Produto:'
       end
+      object btnAdicionar: TButton
+        Left = 312
+        Top = 133
+        Width = 232
+        Height = 33
+        Caption = 'Adicionar Produto'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = 5898495
+        Font.Height = -12
+        Font.Name = 'Roboto'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        OnClick = btnAdicionarClick
+      end
       object edtCliente: TEdit
         Left = 24
         Top = 32
@@ -192,33 +207,6 @@ object frmPedidoVenda: TfrmPedidoVenda
         Enabled = False
         TabOrder = 6
         OnExit = edtProdutoExit
-      end
-      object pnlAdicionar: TPanel
-        Left = 304
-        Top = 138
-        Width = 240
-        Height = 33
-        BevelOuter = bvNone
-        Color = clWhite
-        ParentBackground = False
-        TabOrder = 4
-        object btnAdicionar: TSpeedButton
-          Left = 0
-          Top = 0
-          Width = 240
-          Height = 33
-          Align = alClient
-          Caption = 'Adicionar Produto'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = 5898495
-          Font.Height = -12
-          Font.Name = 'Roboto'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnAdicionarClick
-          ExplicitLeft = 224
-          ExplicitTop = -23
-        end
       end
       object pnlConsultarPedido: TPanel
         Left = 568
@@ -282,7 +270,7 @@ object frmPedidoVenda: TfrmPedidoVenda
       BevelOuter = bvNone
       Color = clWhite
       ParentBackground = False
-      TabOrder = 1
+      TabOrder = 2
       object pnlBtnSalvar: TPanel
         Left = 510
         Top = 8
@@ -294,7 +282,7 @@ object frmPedidoVenda: TfrmPedidoVenda
         Color = clWhite
         ParentBackground = False
         TabOrder = 0
-        object btnGravar: TSpeedButton
+        object btnGravar: TButton
           Left = 0
           Top = 0
           Width = 185
@@ -307,8 +295,8 @@ object frmPedidoVenda: TfrmPedidoVenda
           Font.Name = 'Roboto'
           Font.Style = [fsBold]
           ParentFont = False
+          TabOrder = 0
           OnClick = btnGravarClick
-          ExplicitTop = -2
         end
       end
       object pnlCancelar: TPanel
@@ -322,7 +310,7 @@ object frmPedidoVenda: TfrmPedidoVenda
         Color = clWhite
         ParentBackground = False
         TabOrder = 1
-        object btnCancelar: TSpeedButton
+        object btnCancelar: TButton
           Left = 0
           Top = 0
           Width = 185
@@ -335,11 +323,8 @@ object frmPedidoVenda: TfrmPedidoVenda
           Font.Name = 'Roboto'
           Font.Style = [fsBold]
           ParentFont = False
+          TabOrder = 0
           OnClick = btnCancelarClick
-          ExplicitLeft = 1
-          ExplicitTop = -15
-          ExplicitWidth = 183
-          ExplicitHeight = 57
         end
       end
     end
@@ -351,7 +336,8 @@ object frmPedidoVenda: TfrmPedidoVenda
       Align = alClient
       BorderStyle = bsNone
       DataSource = dsItensPedido
-      TabOrder = 2
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 1
       TitleFont.Charset = DEFAULT_CHARSET
       TitleFont.Color = clWindowText
       TitleFont.Height = -12
@@ -426,17 +412,51 @@ object frmPedidoVenda: TfrmPedidoVenda
   end
   object cdsItensPedido: TClientDataSet
     PersistDataPacket.Data = {
-      9D0000009619E0BD0100000018000000050000000000030000009D000D436F64
-      69676F50726F6475746F01004900000001000557494454480200020014001044
-      657363726963616F50726F6475746F0100490000000100055749445448020002
-      0014000A5175616E74696461646508000400000000000D56616C6F72556E6974
-      6172696F08000400000000000A56616C6F72546F74616C080004000000000000
-      00}
+      AC0000009619E0BD010000001800000006000000000003000000AC0006496449
+      74656D04000100000000000D436F6469676F50726F6475746F01004900000001
+      000557494454480200020014001044657363726963616F50726F6475746F0100
+      4900000001000557494454480200020014000A5175616E746964616465080004
+      00000000000D56616C6F72556E69746172696F08000400000000000A56616C6F
+      72546F74616C08000400000000000000}
     Active = True
     Aggregates = <>
+    FieldDefs = <
+      item
+        Name = 'IdItem'
+        DataType = ftInteger
+      end
+      item
+        Name = 'CodigoProduto'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'DescricaoProduto'
+        DataType = ftString
+        Size = 20
+      end
+      item
+        Name = 'Quantidade'
+        DataType = ftFloat
+      end
+      item
+        Name = 'ValorUnitario'
+        DataType = ftFloat
+      end
+      item
+        Name = 'ValorTotal'
+        DataType = ftFloat
+      end>
+    IndexDefs = <>
     Params = <>
+    StoreDefs = True
     Left = 600
     Top = 184
+    object cdsItensPedidoIdItem: TIntegerField
+      DisplayLabel = 'Id'
+      FieldName = 'IdItem'
+      Visible = False
+    end
     object strngfldItensPedidoCodigoProduto: TStringField
       DisplayLabel = 'C'#243'd. Produto'
       FieldName = 'CodigoProduto'
